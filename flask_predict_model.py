@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pickle
 
 # importing teh dataset
 dataset = pd.read_csv('Churn_Modelling.csv')
@@ -58,13 +59,11 @@ classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accur
 # Fitting the ANN to the Training set
 classifier.fit(X_train, y_train, batch_size=10, epochs=100, validation_split=0.1)
 
+#saving model to disk
+pickle.dump(classifier, open('model.pkl', 'wb'))
+
 ## Part 3 Mkaing predictions and evaluating the model
 
-# Predicting the Test set results
-y_pred = classifier.predict(X_test)
-## y_pred = (y_pred > 0.5)
-
-import pickle
-with open('/home/trolaf/Desktop/projects/customer_churn_retention/srf.pkl', 'wb') as model_pkl:
-    pickle.dump(classifier, model_pkl, protocol=2)
-        
+#Predicting the Test set results
+model = pickle.load('model.pkl', 'rb')
+print(model.predict([[0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000]]))
